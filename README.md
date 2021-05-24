@@ -44,21 +44,19 @@ _**Note: Out of consideration for the Terms & Conditions of the scraped website,
 
 Movies made in 2020 were set aside, because the Academy nominations and awards for that year had not been announced as of the capstone project presentation date (2/23/2021). Of the remaining 175,693 movies, only 1,197 received nominations, and only 237 were Oscar winners, in any of the 24 categories. Before training the estimators, I balanced the representation of inspected classes through bootstrapping - randomly sampling from the 1,197 Oscar movies and adding those samples to the dataset.
 
-The project started with one question: "How well can an algorithm predict whether or not a particular movie will get noticed by the Academy (nominated for an Oscar, in any category)?" Encouraged by the results (see below), I further constructed additional classifiers to answer more specific questions, as listed in Table 2:
+The project started with one question: "How well can an algorithm predict whether or not a particular movie will get noticed by the Academy (nominated for an Oscar, in any category)?". I further constructed additional classifiers to answer more specific questions, as listed in Table 2:
 
 **Table 2 : Models used in making predictions:**
-|Model# |Target variable| |Accuracy* |Recall* |
-|---|---|---|---|---|
-|1 |0: movie will not be noticed by the Academy|1: movie will receive a nomination (and possibly win)|0.992 |0.999 |
-|2 |0: movie will not win any of the Academy Awards|1: movie will win an Academy Award|1.000 |1.000 |
-|3 |0: movie will not be nominated for the Best Picture award|1: movie will be a Best Picture nominee|0.999 |1.000 |
-|4 |0: movie will not win the Best Picture award|1: movie will be the Best Picture of the Year|1.00 |1.000 |
-
-'* listed accuracy and recall scores were calculated in a 5-fold cross-validation
+|Model# |Target variable| |
+|---|---|---|
+|1 |0: movie will not be noticed by the Academy|1: movie will receive a nomination (and possibly win)|
+|2 |0: movie will not win any of the Academy Awards|1: movie will win an Academy Award|
+|3 |0: movie will not be nominated for the Best Picture award|1: movie will be a Best Picture nominee|
+|4 |0: movie will not win the Best Picture award|1: movie will be the Best Picture of the Year|
 
 Considering the imbalanced classes in the original dataset, high accuracy was easy to achieve: even a naive baseline model classifying all movies as no-nominations and no-wins scored 0.999 across all questions. The important metric that I chose to maximize for was recall (percentage of all true positives correctly predicted by the model as positives).
 
-I initially attempted addressing all four questions using a Logistic Regression estimator in hopes of achieving an interpretable model and a "recipe for an Oscar movie". However, based on the poor recall scores of Logistic Regression with regards to all questions except for #1 above, I decided to instead use Random Forest Classifiers in making all predictions. As shown in Table 2, Random Forest performed exceptionally well.
+I initially attempted addressing all four questions using a Logistic Regression estimator in hopes of achieving an interpretable model and a "recipe for an Oscar movie". However, based on the poor recall scores of Logistic Regression with regards to all questions except for #1 above, I chose to train other estimators (Random Forest Classifiers, Support Vector Classifiers, Neural Networks, Voting Classifiers, and Stacking Classifiers) and use for predictions the one which achieved the best balance of precision and recall scores.
 
 Without direct interpretability, I was still able to gain insight to the variables each of the Random Forest Classifiers relied on when making predictions. Interestingly, although most of the top ten features remained constant between the four models, their ranks changed from the more general "will a movie be noticed?" question to the very specific "will a movie win Best Picture":
 
@@ -98,12 +96,6 @@ Without direct interpretability, I was still able to gain insight to the variabl
 ![](/visualizations/oscar_newcomers_win.png)
 6. The five most important features: opening weekend results, budget, history of previous Oscar movies among the cast and crew, and runtime, remain unchanged across the four models. Notably, the movie duration (runtime) pays a much higher role in predicting Best Picure winners than any of the other three classes.
 ![](/visualizations/feat_imp_rfc_bp_win.png)
-7. The RFC algorithm trained on data from 1990-2019 predicted the following movies to be the front-runners for the upcoming 2020 Academy Awards:
-- Mank
-- Hillbilly Elegy
-- The Invisible Man
-- News of the World
-- Wendy
 
 -----------------------
 ### Next Steps
